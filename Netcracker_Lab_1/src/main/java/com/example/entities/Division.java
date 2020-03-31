@@ -2,6 +2,9 @@ package com.example.entities;
 
 import com.example.entities.IDivision;
 
+import javax.xml.bind.annotation.XmlType;
+
+@XmlType(name = "division")
 public class Division implements IDivision {
 
     private String name;

@@ -1,31 +1,39 @@
 package com.example.entities;
 
+import com.example.adapters.LocalDateAdapter;
 import com.example.entities.IDivision;
 import com.example.entities.IPerson;
 import com.example.entities.enums.Gender;
 import org.joda.time.LocalDate;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.math.BigDecimal;
 
 /***
  * Класс Person
  */
+
+@XmlType(name = "person")
 public class Person implements IPerson {
 
-    private LocalDate birthDay;
+    private LocalDate birthdate;
     private int id;
     private String firstName;
-    private String secondName;
+    private String lastName;
     private Gender gender;
     private BigDecimal salary;
-    private IDivision division;
+    @XmlElement(name = "division")
+    private Division division;
 
-    /***
-     * @param birthDay
-     * @param id
-     */
-    public Person(LocalDate birthDay, int id) {
-        this.birthDay = birthDay;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+
+
+    public Person(LocalDate birthdate, int id) {
+        this.birthdate = birthdate;
         this.id = id;
     }
 
@@ -56,35 +64,38 @@ public class Person implements IPerson {
     }
 
     @Override
+    @XmlElement(name = "LastName")
     public String getLastName() {
-        return this.secondName;
+        return this.lastName;
     }
 
     @Override
     public void setLastName(String lastName) {
-        this.secondName = firstName;
+        this.lastName = lastName;
     }
 
     @Override
+    @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
     public LocalDate getBirthdate() {
-        return this.birthDay;
+        return this.birthdate;
     }
 
     @Override
-    public void setBirthdate( LocalDate birthdate) {
-        this.birthDay = birthdate;
+    public void setBirthdate( LocalDate birthDay) {
+        this.birthdate = birthDay;
     }
+
 
     @Override
     public Integer getAge() {
         LocalDate nowdate = LocalDate.now();
         int approxim = 0;
-        if(nowdate.getMonthOfYear() - birthDay.getMonthOfYear() < 0)
+        if(nowdate.getMonthOfYear() - birthdate.getMonthOfYear() < 0)
             approxim = 1;
-        else if(nowdate.getMonthOfYear() - birthDay.getMonthOfYear() == 0)
-            if (nowdate.getDayOfYear() - birthDay.getDayOfYear() < 0)
+        else if(nowdate.getMonthOfYear() - birthdate.getMonthOfYear() == 0)
+            if (nowdate.getDayOfYear() - birthdate.getDayOfYear() < 0)
                 approxim = 1;
-        return nowdate.getYear() - birthDay.getYear() - approxim;
+        return nowdate.getYear() - birthdate.getYear() - approxim;
     }
 
     @Override
@@ -97,14 +108,15 @@ public class Person implements IPerson {
         this.gender = gender;
     }
 
+
     @Override
-    public IDivision getDivision() {
+    public Division getDivision() {
         return this.division;
     }
 
     @Override
     public void setDivision(IDivision division) {
-        this.division = division;
+        this.division = (Division) division;
     }
 
     @Override
@@ -121,10 +133,10 @@ public class Person implements IPerson {
     @Override
     public String toString() {
         return "Person{" +
-                "birthDay=" + birthDay +
+                "birthDay=" + birthdate +
                 ", id=" + id +
                 ", firstName='" + firstName + '\'' +
-                ", secondName='" + secondName + '\'' +
+                ", secondName='" + lastName + '\'' +
                 ", gender=" + gender +
                 ", salary=" + salary +
                 ", division=" + division +
